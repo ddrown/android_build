@@ -1155,8 +1155,15 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
            -k $(KEY_CERT_PAIR) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
-.PHONY: otapackage
+.PHONY: otapackage squish
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+squish: otapackage
+ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
+	@echo "Running releasetool"
+	$(hide) $(TARGET_CUSTOM_RELEASETOOL)
+else
+	$(hide) ./tools/squisher
+endif
 
 # -----------------------------------------------------------------
 # The update package
