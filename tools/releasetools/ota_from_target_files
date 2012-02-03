@@ -395,6 +395,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
+  if OPTIONS.backuptool:
+    script.RunBackup("backup")
  
 # MOTD during flash added for Codename Android by cocide
   if (OPTIONS.motd != None):
