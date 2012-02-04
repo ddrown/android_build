@@ -25,7 +25,12 @@ PRODUCT_PACKAGES := \
 	Exchange \
 	Gallery \
 	Mms \
+    OpenWnn \
+    libWnnEngDic \
+    libWnnJpnDic \
+    libwnndict \
 	Phone \
+    PinyinIME \
 	Protips \
 	SoftKeyboard \
 	SystemUI \
