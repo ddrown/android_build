@@ -52,10 +52,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
   -a  (--aslr_mode)  <on|off>
       Specify whether to turn on ASLR for the package (on by default).
 
-  --backup <boolean>
-      Enable or disable the execution of backuptool.sh.
-      Disabled by default.
-
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
 
@@ -395,8 +391,6 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
-  if OPTIONS.backuptool:
-    script.RunBackup("backup")
 
   script.ShowProgress(0.5, 0)
 
@@ -433,10 +427,6 @@ def WriteFullOTAPackage(input_zip, output_zip):
   common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
   script.ShowProgress(0.2, 0)
-
-  if OPTIONS.backuptool:
-    script.ShowProgress(0.2, 10)
-    script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
   script.WriteRawImage("/boot", "boot.img")
@@ -779,8 +769,6 @@ def main(argv):
         OPTIONS.aslr_mode = False
     elif o in ("--worker_threads"):
       OPTIONS.worker_threads = int(a)
-    elif o in ("--backup"):
-      OPTIONS.backuptool = bool(a.lower() == 'true')
     elif o in ("--override_device"):
       OPTIONS.override_device = a
     else:
@@ -797,7 +785,6 @@ def main(argv):
                                               "extra_script=",
                                               "worker_threads=",
                                               "aslr_mode=",
-                                              "backup=",
                                               "override_device="],
                              extra_option_handler=option_handler)
 
