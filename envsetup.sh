@@ -1059,6 +1059,17 @@ function mka() {
             ;;
     esac
 }
+
+function codenamedroid() {
+    case `uname -s` in
+        Darwin)
+            make -j32 squish CND_RELEASE=true
+            ;;
+        *)
+            schedtool -B -n 1 -e ionice -n 1 make -j32 squish CND_RELEASE=true
+            ;;
+    esac
+}
 	
 function reposync() {
     case `uname -s` in
