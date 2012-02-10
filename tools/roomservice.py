@@ -7,9 +7,9 @@ from xml.etree import ElementTree
 
 product = sys.argv[1];
 device = product[product.index("_") + 1:]
-print "Device %s not found. Attempting to retrieve device repository from Codename: Android Github (http://github.com/codenamedroid)." % device
+print "Device %s not found. Attempting to retrieve device repository from Codename Android Github (http://github.com/CNA)." % device
 
-result = json.loads(urllib2.urlopen("http://github.com/api/v2/json/repos/show/codenamedroid").read())
+result = json.loads(urllib2.urlopen("http://github.com/api/v2/json/repos/show/CNA").read())
 for repository in result['repositories']:
     repo_name = repository['name']
     if repo_name.startswith("android_device_") and repo_name.endswith("_" + device):
@@ -28,7 +28,7 @@ for repository in result['repositories']:
                 sys.exit()
 
         repo_path = "device/%s/%s" % (manufacturer, device)
-        project = ElementTree.Element("project", attrib = { "path": repo_path, "remote": "github", "name": "codenamedroid/%s" % repository['name'] })
+        project = ElementTree.Element("project", attrib = { "path": repo_path, "remote": "github", "name": "CNA/%s" % repository['name'] })
         lm.append(project)
         
         raw_xml = ElementTree.tostring(lm)
@@ -43,4 +43,4 @@ for repository in result['repositories']:
         print "Done!"
         sys.exit()
 
-print "Repository for %s not found in the Codename: Android Github repository list. If this is in error, you may need to manually add it to your local_manifest.xml." % device
+print "Repository for %s not found in the Codename Android Github repository list. If this is in error, you may need to manually add it to your local_manifest.xml." % device
