@@ -20,6 +20,9 @@ KERNEL_CONFIG := $(KERNEL_OUT)/.config
 ifeq ($(BOARD_USES_UBOOT),true)
 	TARGET_PREBUILT_INT_KERNEL := $(KERNEL_OUT)/arch/$(TARGET_ARCH)/boot/uImage
 	TARGET_PREBUILT_INT_KERNEL_TYPE := uImage
+else ifeq ($(BOARD_USES_UNCOMPRESSED_BOOT),true)
+	TARGET_PREBUILT_INT_KERNEL := $(KERNEL_OUT)/arch/$(TARGET_ARCH)/boot/Image
+	TARGET_PREBUILT_INT_KERNEL_TYPE := Image
 else
 	TARGET_PREBUILT_INT_KERNEL := $(KERNEL_OUT)/arch/$(TARGET_ARCH)/boot/zImage
 	TARGET_PREBUILT_INT_KERNEL_TYPE := zImage
@@ -118,14 +121,14 @@ ifeq ($(TARGET_ARCH),arm)
         endif
       endif
     endif
-    ifeq ($(HOST_OS),darwin)
-      ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilt/darwin-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-"
+    ifneq ($(TARGET_KERNEL_CUSTOM_TOOLCHAIN),)
+        ifeq ($(HOST_OS),darwin)
+            ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilt/darwin-x86/toolchain/$(TARGET_KERNEL_CUSTOM_TOOLCHAIN)/bin/arm-eabi-"
+        else
+            ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilt/linux-x86/toolchain/$(TARGET_KERNEL_CUSTOM_TOOLCHAIN)/bin/arm-eabi-"
+        endif
     else
-      ifneq ($(TARGET_KERNEL_CUSTOM_TOOLCHAIN),)
-          ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilt/linux-x86/toolchain/$(TARGET_KERNEL_CUSTOM_TOOLCHAIN)/bin/arm-eabi-"
-      else
         ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ARM_EABI_TOOLCHAIN)/arm-eabi-"
-      endif
     endif
     ccache = 
 endif
